@@ -1,0 +1,7 @@
+Hi <%= @return_order.customer.name %>,
+
+The shop moved your return <%= @return_order.number %> to another return location. Please do not post it to the old address.
+
+<%= @return_order.posting_instructions %>
+
+Follow its status: <%= @status_url %>

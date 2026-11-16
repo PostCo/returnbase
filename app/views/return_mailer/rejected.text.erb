@@ -1,0 +1,6 @@
+Hi <%= @return_order.customer.name %>,
+
+We could not accept the items in return <%= @return_order.number %>, so we will not send a replacement or refund anything further.
+
+<%= render "items" %>
+Follow its status: <%= @status_url %>

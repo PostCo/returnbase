@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Runs the Playwright suite in e2e/ against the running stack, inside the Playwright image so the host needs only Docker.
+# Resets the database, the fake vendors, the label service and Mailpit first, so local changes to the demo data are lost.
+# Arguments go to playwright test, for example: bin/e2e tests/03-storebox.spec.ts
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+web=$(docker compose ps -q web)
+if [ -z "$web" ]; then
+  echo "The stack is not running. Run bin/setup first." >&2
+  exit 1
+fi
+
+bin/reset
+curl -fsS -X POST http://localhost:4100/reset >/dev/null
+curl -fsS -X POST http://localhost:4300/admin/reset >/dev/null
+curl -fsS -X DELETE http://localhost:8125/api/v1/messages >/dev/null
+echo "Vendors, the label service and Mailpit cleared."
+
+version=$(sed -n 's/.*"@playwright\/test": "\(.*\)".*/\1/p' e2e/package.json)
+network=$(docker inspect --format '{{range $name, $_ := .NetworkSettings.Networks}}{{$name}}{{end}}' "$web")
+
+docker run --rm --init --ipc=host --network "$network" \
+  --user "$(id -u):$(id -g)" -e HOME=/tmp -e CI -e npm_config_update_notifier=false \
+  -e BASE_URL=http://web:5180 -e MAILPIT_URL=http://mailpit:8125 -e VENDORS_URL=http://vendors:4100 -e SHIPPING_URL=http://shipping:4300 \
+  -v "$PWD/e2e:/e2e" -w /e2e "mcr.microsoft.com/playwright:v$version-noble" \
+  sh -c 'npm ci --no-audit --no-fund --loglevel=error && npx playwright test "$@"' playwright "$@"
+
+echo "Report: e2e/playwright-report/index.html"

@@ -1,0 +1,9 @@
+Hi <%= @return_order.customer.name %>,
+
+Your prepaid label for return <%= @return_order.number %> is ready.
+
+Print your prepaid label: <%= @shipment.label_url %>
+Tracking number: <%= @shipment.tracking_number %>
+
+<%= render "items" %>
+Follow its status: <%= @status_url %>

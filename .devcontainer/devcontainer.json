@@ -1,0 +1,16 @@
+{
+  "name": "Returnbase",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "postCreateCommand": "bin/setup",
+  "forwardPorts": [5180, 3100, 4100, 4300, 8125],
+  "portsAttributes": {
+    "5180": { "label": "Web" },
+    "3100": { "label": "API" },
+    "4100": { "label": "Vendors" },
+    "4300": { "label": "Shipping" },
+    "8125": { "label": "Mailpit" }
+  }
+}

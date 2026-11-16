@@ -1,0 +1,10 @@
+<% content_for :title, "Demo data" %>
+<div class="crumb">Admin / Demo data</div>
+<h1>Demo data was reset</h1>
+<ul>
+  <li>Database: emptied and seeded again, <%= pluralize(@reset[:shops], "shop") %> and <%= pluralize(@reset[:returns], "return") %>. Merchants have to log in again.</li>
+  <% @reset[:outside].each do |name, error| %>
+    <li><%= name %>: <%= error ? "could not be cleared (#{error})" : "cleared" %></li>
+  <% end %>
+</ul>
+<p><a href="<%= admin_parcel_dock_path %>">Back to the support page</a></p>

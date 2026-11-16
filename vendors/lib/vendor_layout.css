@@ -1,0 +1,79 @@
+*{box-sizing:border-box}
+body{margin:0;font:14px/20px var(--font),system-ui,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button,select{font:inherit;color:inherit}
+button{cursor:pointer}
+
+/* One theme per vendor */
+.v-storebox{--font:"Space Grotesk";--ink:#161412;--bg:#E8E4DD;--brand:#FF5B14;--brand-ink:#161412;--bar:#161412;--bar-ink:#F4F1EA;--bar-muted:#A8A29A;--line:#161412;--soft:#D6D1C8;--radius:0;--lift:3px 3px 0 #161412}
+.v-quickpost{--font:"Archivo";--ink:#1B1B1F;--bg:#FFF8E3;--brand:#E1060F;--brand-ink:#fff;--bar:#fff;--bar-ink:#1B1B1F;--bar-muted:#6B6B73;--line:#1B1B1F;--soft:#EADFC0;--radius:2px;--lift:0 3px 0 #9A0409}
+.v-parceldock{--font:"Sora";--ink:#0B2A4A;--bg:#EEF4F8;--brand:#12B5A5;--brand-ink:#05263A;--bar:#0B3B6F;--bar-ink:#fff;--bar-muted:#9DB6D3;--line:#0B3B6F;--soft:#D5E1EA;--radius:10px;--lift:none}
+.v-index{--font:"IBM Plex Mono";--ink:#161412;--bg:#EDEBE7;--brand:#161412;--brand-ink:#fff;--bar:#161412;--bar-ink:#F4F1EA;--bar-muted:#A8A29A;--line:#161412;--soft:#D6D1C8;--radius:4px;--lift:none}
+
+/* The banner is the same on every vendor page */
+.tape{position:sticky;top:0;z-index:5;padding:6px;text-align:center;background:repeating-linear-gradient(-45deg,#FFCE00 0 14px,#161412 14px 28px)}
+.tape span{display:inline-block;padding:2px 12px;background:#161412;color:#FFCE00;font:600 12px/18px "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase}
+
+.top{display:flex;align-items:center;gap:32px;height:56px;padding:0 24px;background:var(--bar);color:var(--bar-ink)}
+.v-quickpost .top{border-bottom:4px solid var(--brand)}
+.top nav{display:flex;gap:20px;height:100%}
+.top nav a{display:flex;align-items:center;padding:0 2px;border-bottom:3px solid transparent;color:var(--bar-muted);font-weight:500;text-decoration:none}
+.top nav a[aria-current]{color:var(--bar-ink);border-bottom-color:var(--brand)}
+
+/* A wordmark carries its own colours, so it looks the same in the header, the footer and the vendors index */
+.mark{display:inline-flex;align-items:center;text-decoration:none;white-space:nowrap}
+.m-storebox{gap:10px;font:700 21px/1 "Space Grotesk",sans-serif;letter-spacing:-.03em}
+.m-storebox .mk{display:inline-block;width:22px;height:22px;background:#FF5B14;position:relative}
+.m-storebox .mk::after{content:"";position:absolute;left:0;right:0;top:7px;height:3px;background:#161412}
+.m-quickpost{font:italic 400 22px/1 "Archivo Black",sans-serif;letter-spacing:-.03em;color:#E1060F}
+.m-quickpost b{font-weight:400;background:#FFC400;padding:0 4px;margin-left:2px}
+.m-parceldock{gap:7px;font:700 19px/1 Sora,sans-serif;letter-spacing:-.02em;color:#0B3B6F}
+.m-parceldock .mk{display:inline-block;width:12px;height:12px;border-radius:3px 3px 50% 50%;background:#12B5A5}
+.m-index{font:600 16px/1 "IBM Plex Mono",monospace}
+.top .m-storebox,.top .m-index{color:var(--bar-ink)}
+.top .m-parceldock{color:#fff}
+
+main{max-width:1120px;padding:24px}
+.head{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+h1{margin:0;font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.03em}
+.v-quickpost h1{font-family:"Archivo Black",sans-serif;font-weight:400;font-style:italic}
+.controls,.controls form{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0}
+.label{font:600 11px/16px "IBM Plex Mono",ui-monospace,monospace;text-transform:uppercase;letter-spacing:.08em}
+
+/* Scenario switch, a row of submit buttons so it works without JavaScript */
+.seg{display:flex;flex-wrap:wrap;border:2px solid var(--line);border-radius:var(--radius);background:#fff;overflow:hidden}
+.seg button{border:0;background:#fff;padding:5px 10px;font:12px/18px "IBM Plex Mono",ui-monospace,monospace}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed=true]{background:var(--line);color:#fff}
+
+.btn,main table button{padding:5px 12px;border:2px solid var(--line);border-radius:var(--radius);background:var(--brand);color:var(--brand-ink);font-weight:700;box-shadow:var(--lift);white-space:nowrap}
+.btn:active,main table button:active{transform:translate(2px,2px)}
+.btn.ghost{background:#fff;color:var(--ink)}
+.btn:focus-visible,.seg button:focus-visible,main table button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;background:#fff;border:2px solid var(--line)}
+th{padding:8px 12px;background:var(--line);color:#fff;text-align:left;font-size:11px;line-height:16px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+td{padding:12px;border-top:1px solid var(--soft);font:13px/20px "IBM Plex Mono",ui-monospace,monospace;vertical-align:top}
+td form{margin:0}
+pre{margin:0;max-width:520px;white-space:pre-wrap;word-break:break-all;font:inherit;font-size:12px}
+select{height:28px;border:1.5px solid var(--line);border-radius:var(--radius);background:#fff;font:12px "IBM Plex Mono",ui-monospace,monospace}
+.pick{display:grid;gap:8px}
+.pick label{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.empty{padding:32px;text-align:center;background:#fff;border:2px dashed var(--line);border-radius:var(--radius);font-weight:500}
+
+.st{display:inline-block;padding:1px 8px;border:1.5px solid var(--line);border-radius:var(--radius);font:600 11px/18px "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.st-pending,.st-label-created{background:#FFE9A8}
+.st-received,.st-picked-up,.st-in{background:#BFE0FF}
+.st-inspected,.st-delivered,.st-ok{background:#BDECC6}
+.st-bad{background:#FFC9C4}
+
+footer{display:flex;align-items:center;gap:28px;flex-wrap:wrap;margin-top:40px;padding:14px 16px;border-top:2px solid var(--line)}
+footer .mark{font-size:18px}
+.vendor-list{display:grid;gap:12px;padding:0;list-style:none}
+.vendor-list li{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:14px 16px;background:#fff;border:2px solid var(--line);border-radius:var(--radius)}
+.vendor-list .mark{min-width:160px}
+.vendor-list .m-storebox,footer .m-storebox{color:#161412}
+
+@media (max-width:760px){.top{gap:16px;padding:0 16px}main{padding:16px}h1{font-size:24px}}
+

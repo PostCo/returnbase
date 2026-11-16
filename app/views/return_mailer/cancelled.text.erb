@@ -1,0 +1,9 @@
+Hi <%= @return_order.customer.name %>,
+
+Your return <%= @return_order.number %> has been cancelled. Please do not send the parcel.
+<% if @shipment&.label_url -%>
+The prepaid label (tracking number <%= @shipment.tracking_number %>) will not be used, so you can throw it away.
+<% end -%>
+
+<%= render "items" %>
+Follow its status: <%= @status_url %>

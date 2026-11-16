@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+/*
+ * Merchant theme. Colours, radii and fonts are variables here, and Tailwind classes read them
+ * (bg-card, text-muted-foreground, rounded-card, font-mono). Change a value here to restyle every page.
+ * Spacing uses Tailwind's default 4px scale.
+ */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-info: var(--info-fg);
+  --color-info-soft: var(--info-bg);
+  --color-success: var(--success-fg);
+  --color-success-soft: var(--success-bg);
+  --color-warning: var(--warning-fg);
+  --color-warning-soft: var(--warning-bg);
+  --color-danger: var(--danger-fg);
+  --color-danger-soft: var(--danger-bg);
+  --color-neutral: var(--neutral-fg);
+  --color-neutral-soft: var(--neutral-bg);
+  --radius-control: var(--r-control);
+  --radius-card: var(--r-card);
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+:root {
+  --background: #f6f4f1;
+  --foreground: #0b0b0f;
+  --card: #ffffff;
+  --primary: #0b0b0f;
+  --primary-foreground: #ffffff;
+  --secondary: #efedea;
+  --secondary-foreground: #0b0b0f;
+  --muted: #faf9f7;
+  --muted-foreground: #6f6a66;
+  --accent: #f3f1ee;
+  --brand: #4c3fe0;
+  --brand-soft: #efedfd;
+  --destructive: #a12f29;
+  --destructive-foreground: #ffffff;
+  --border: rgb(11 11 15 / 0.09);
+  --input: rgb(11 11 15 / 0.16);
+  --ring: #4c3fe0;
+  --info-bg: #e6f0fa;
+  --info-fg: #1d5a8e;
+  --success-bg: #e2f3e8;
+  --success-fg: #1c6a3b;
+  --warning-bg: #fcf1d8;
+  --warning-fg: #865600;
+  --danger-bg: #fbe8e6;
+  --danger-fg: #a12f29;
+  --neutral-bg: #eeedeb;
+  --neutral-fg: #5f5b57;
+  --r-control: 8px;
+  --r-card: 12px;
+  --font-ui: Onest, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before {
+    border-color: var(--border);
+  }
+}
+
+/* main.tsx adds this class to the body of the merchant app, so dialogs and menus rendered outside the page share its font. */
+.rb-app {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 20px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.rb-app :focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.rb-skeleton {
+  background: linear-gradient(90deg, #efece8 0%, #f7f5f2 50%, #efece8 100%);
+  background-size: 200% 100%;
+  animation: rb-shimmer 1.4s linear infinite;
+}
+
+@keyframes rb-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes rb-pop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.97);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rb-skeleton {
+    animation: none;
+  }
+  .rb-pop {
+    animation: none;
+  }
+}

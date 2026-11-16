@@ -1,0 +1,56 @@
+name: Setup
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - run: bin/setup
+      - run: bin/verify
+      - name: Generated files belong to the runner user
+        run: |
+          docker compose exec -T api bin/rails generate model OwnershipProbe --skip-migration
+          owner=$(stat -c %u app/models/ownership_probe.rb)
+          if [ "$owner" != "$(id -u)" ]; then
+            echo "app/models/ownership_probe.rb is owned by uid $owner, expected $(id -u)" >&2
+            exit 1
+          fi
+      - if: failure()
+        run: docker compose logs --tail 100
+
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - run: git config --global core.autocrlf true
+      - uses: actions/checkout@v4
+      - name: Check line endings, name clashes and path length
+        shell: bash
+        run: |
+          status=0
+          git ls-files --eol 'bin/*' '*.sh'
+          crlf=$(git ls-files --eol 'bin/*' '*.sh' | grep 'w/crlf' || true)
+          if [ -n "$crlf" ]; then echo "CRLF line endings in:"; echo "$crlf"; status=1; fi
+          clashes=$(git ls-files | tr '[:upper:]' '[:lower:]' | sort | uniq -d)
+          if [ -n "$clashes" ]; then echo "Paths that differ only by case:"; echo "$clashes"; status=1; fi
+          long=$(git ls-files | awk 'length($0) > 200')
+          if [ -n "$long" ]; then echo "Paths longer than 200 characters:"; echo "$long"; status=1; fi
+          exit $status
+      - name: bin/setup runs in Git Bash and turns on file polling
+        shell: bash
+        run: |
+          # GitHub's Windows runners can't run Linux containers, so a stand-in docker answers every call
+          fake_bin=$(mktemp -d)
+          printf '#!/usr/bin/env bash\nexit 0\n' > "$fake_bin/docker"
+          chmod +x "$fake_bin/docker"
+          PATH="$fake_bin:$PATH" bin/setup
+          cat .env
+          grep -Eq '^HOST_UID=[0-9]+$' .env
+          grep -qx 'WEB_WATCH_POLLING=1' .env

@@ -1,0 +1,12 @@
+Hi <%= @return_order.customer.name %>,
+
+Your replacement items for return <%= @return_order.number %> are on their way:
+
+<% @return_order.exchanges.includes(:variant).each do |exchange| -%>
+- <%= exchange.quantity %> x <%= exchange.variant.display_name %>
+<% end -%>
+
+The items in this return:
+
+<%= render "items" %>
+Follow its status: <%= @status_url %>

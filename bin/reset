@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Drops the database and loads the schema and seeds again.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+docker compose up -d --wait db
+docker compose stop api worker web
+docker compose run --rm --no-deps api bin/rails db:drop db:setup
+docker compose up -d --wait
+
+echo "Database reset."

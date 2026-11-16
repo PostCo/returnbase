@@ -1,0 +1,41 @@
+<% content_for :title, "ParcelDock setup" %>
+<div class="crumb">Admin / Integrations / ParcelDock</div>
+<h1>ParcelDock setup</h1>
+<p class="lede">Support only. A shop with ParcelDock enabled buys its prepaid labels from ParcelDock, and those returns go to the facility location.</p>
+<% if @notice.present? %><p class="notice" role="status"><%= @notice %></p><% end %>
+<div class="scroll">
+  <table>
+    <thead>
+      <tr><th>Shop</th><th>Status</th><th>API key</th><th>Facility location</th><th>Enabled</th><th></th></tr>
+    </thead>
+    <tbody>
+      <% @shops.each do |shop| %>
+        <% integration = shop.parcel_dock_integration %>
+        <% form = "parcel-dock-shop-#{shop.id}" %>
+        <tr>
+          <td><%= shop.name %><small>shop <%= shop.id %></small></td>
+          <td><span class="pill <%= "enabled" if integration&.enabled? %>"><%= integration ? integration.status : "not set up" %></span></td>
+          <td><input type="text" form="<%= form %>" name="api_key" aria-label="API key" placeholder="<%= integration ? "#{integration.api_key_hint} (leave blank to keep)" : "ParcelDock API key" %>"></td>
+          <td>
+            <select form="<%= form %>" name="facility_location_id" aria-label="Facility location">
+              <% shop.locations.sort_by(&:name).each do |location| %>
+                <option value="<%= location.id %>" <%= "selected" if location.parcel_dock_facility? %>><%= location.name %></option>
+              <% end %>
+            </select>
+          </td>
+          <td class="center"><input type="checkbox" form="<%= form %>" name="enabled" value="1" aria-label="Enabled" <%= "checked" if integration&.enabled? %>></td>
+          <td>
+            <form id="<%= form %>" method="post" action="<%= admin_parcel_dock_shop_path(shop) %>"><button>Save</button></form>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<h2>Demo data</h2>
+<p class="lede">Empties the database and loads the seeds again, then clears the fake vendors, the label service and Mailpit. Merchants who are logged in have to log in again.</p>
+<form method="post" action="<%= admin_demo_reset_path %>">
+  <input type="password" name="password" aria-label="Reset password" placeholder="Reset password" required style="width: 220px; min-width: 0">
+  <button>Reset all demo data</button>
+</form>

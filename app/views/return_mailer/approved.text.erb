@@ -1,0 +1,12 @@
+Hi <%= @return_order.customer.name %>,
+
+Your return <%= @return_order.number %> is approved.
+
+<% if @return_order.label? -%>
+Your prepaid label will follow by email shortly.
+<% else -%>
+<%= @return_order.posting_instructions %>
+<% end -%>
+
+<%= render "items" %>
+Follow its status: <%= @status_url %>

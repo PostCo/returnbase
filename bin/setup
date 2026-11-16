@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Builds the images, starts every service and waits until they are healthy.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+if ! command -v docker >/dev/null 2>&1; then
+  echo "Docker is not installed. Install Docker Desktop (or Docker Engine) and run bin/setup again." >&2
+  exit 1
+fi
+if ! docker info >/dev/null 2>&1; then
+  echo "Docker is not running. Start Docker Desktop and run bin/setup again." >&2
+  exit 1
+fi
+
+# Git Bash on Windows: Docker passes no file change events from Windows folders
+# into containers, so the web server checks for changes on a timer instead.
+watch_polling=0
+case "$(uname -s)" in
+  MINGW* | MSYS* | CYGWIN*) watch_polling=1 ;;
+esac
+
+printf 'HOST_UID=%s\nHOST_GID=%s\nWEB_WATCH_POLLING=%s\n' "$(id -u)" "$(id -g)" "$watch_polling" > .env
+
+docker compose build
+docker compose up -d --wait --wait-timeout 900
+docker compose exec -T api bin/rails db:prepare
+
+echo "Setup finished. Run bin/verify next."

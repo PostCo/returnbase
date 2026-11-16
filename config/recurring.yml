@@ -1,0 +1,11 @@
+# Jobs bin/jobs runs on a schedule.
+default: &default
+  store_box_poll:
+    class: StoreBox::PollJob
+    schedule: every minute
+
+development:
+  <<: *default
+
+production:
+  <<: *default

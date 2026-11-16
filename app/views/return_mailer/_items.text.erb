@@ -1,0 +1,3 @@
+<% @return_order.items.includes(:variant, :exchange_variant).each do |item| -%>
+- <%= item.quantity %> x <%= item.variant.display_name %> (<%= item.resolution %><%= " for #{item.exchange_variant.display_name}" if item.exchange? %>)<%= " - not accepted" if item.rejected? %>
+<% end -%>
